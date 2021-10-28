@@ -61,6 +61,8 @@ docker run -it --rm -e SENTRY_SECRET_KEY='<secret-key>' --link sentry-redis:redi
 # docker run -it --rm -e SENTRY_SECRET_KEY='b@7vy*r@*otg!el*_%3-5*o=@lmia9h#x%kgfi!1vw+%f4hbg_' --link sentry-redis:redis --link sentry-postgres:postgres sentry createuser
 ```
 
+
+
 ## References
 
 - [Docker - Sentry](https://hub.docker.com/_/sentry)
