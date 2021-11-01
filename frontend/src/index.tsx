@@ -1,17 +1,43 @@
+import './index.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
+import * as Sentry from '@sentry/browser';
+
+// import { Integrations } from '@sentry/tracing';
+import App from './App';
+
+// function FallbackComponent() {
+//   return <div>An error has occurred</div>;
+// }
+
+
+
+// Sentry.init({
+//   dsn: "http://7d1cb583c8644601b7fa700a4d522e9a@localhost:8080/2",
+//   integrations: [new Integrations.BrowserTracing()],
+
+//   // We recommend adjusting this value in production, or using tracesSampler
+//   // for finer control
+//   tracesSampleRate: 1.0,
+// });
+Sentry.init({dsn: "http://7d1cb583c8644601b7fa700a4d522e9a@localhost:8080/2"});
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <Sentry.ErrorBoundary fallback={myFallback} showDialog>
+//       <App />
+//     </Sentry.ErrorBoundary>
+//   </React.StrictMode>,
+//   document.getElementById("root")
+// );
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <button onClick={() => { throw new Error("Caçilds")}}>Break the world</button>,
+    document.getElementById("root")
+  // <React.StrictMode>
+  //     <App />
+  // </React.StrictMode>,
+  // document.getElementById("root")
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
