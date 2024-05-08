@@ -15,43 +15,43 @@ docker compose up -d
 - Login <http://localhost:9000/>
 - (Optional)Create expo app
 
-```sh
-npx create-expo-app
-cd create-expo-app
-npx expo install @sentry/react-native
-npx @sentry/wizard@latest -s -i reactNative
-  #yes
-  #self-hosted
-  #http://localhost:9000
-  #yes
-```
+  ```sh
+  npx create-expo-app
+  cd create-expo-app
+  npx expo install @sentry/react-native
+  npx @sentry/wizard@latest -s -i reactNative
+    #yes
+    #self-hosted
+    #http://localhost:9000
+    #yes
+  ```
 
-- Configuring `@sentry/react-native` can be done through the config plugin. Add the plugin to your project's app config file:
+  - Configuring `@sentry/react-native` can be done through the config plugin. Add the plugin to your project's app config file:
 
-```app.json
-{
-  "expo": {
-    "plugins": [
-      [
-        "@sentry/react-native/expo",
-        {
-          "organization": "sentry org slug, or use the `SENTRY_ORG` environment variable",
-          "project": "sentry project name, or use the `SENTRY_PROJECT` environment variable"
-        }
+  ```app.json
+  {
+    "expo": {
+      "plugins": [
+        [
+          "@sentry/react-native/expo",
+          {
+            "organization": "sentry org slug, or use the `SENTRY_ORG` environment variable",
+            "project": "sentry project name, or use the `SENTRY_PROJECT` environment variable"
+          }
+        ]
       ]
-    ]
+    }
   }
-}
-```
+  ```
 
-- metro.config.js
+  - metro.config.js
 
-```
-// This replaces `const { getDefaultConfig } = require('expo/metro-config');`
-const { getSentryExpoConfig } = require('@sentry/react-native/metro');
+  ```
+  // This replaces `const { getDefaultConfig } = require('expo/metro-config');`
+  const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 
-// This replaces `const config = getDefaultConfig(__dirname);`
-const config = getSentryExpoConfig(__dirname);
+  // This replaces `const config = getDefaultConfig(__dirname);`
+  const config = getSentryExpoConfig(__dirname);
 
-module.exports = config;
-```
+  module.exports = config;
+  ```
