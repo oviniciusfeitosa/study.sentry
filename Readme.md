@@ -11,8 +11,8 @@ docker compose up -d
 #password: xxxxxx
 ```
 
+- Log in to the Sentry interface: <http://localhost:9000/>
 - Back to root folder: `cd ..`
-- Login <http://localhost:9000/>
 - (Optional)Create expo app
 
   ```sh
