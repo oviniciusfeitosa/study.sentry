@@ -1,25 +1,24 @@
 # Sentry
 
-user: <vinciusfesil@gmail.com>
-password: xxxxxx
+## Steps
 
 ```sh
 git clone https://github.com/getsentry/self-hosted
 cd self-hosted
 ./install.sh
-cd ..
 docker compose up -d
+#user: <user@gmail.com>
+#password: xxxxxx
 ```
 
+- Back to root folder: `cd ..`
 - Login <http://localhost:9000/>
-- Create Project for react native
-
-
-- Create expo app
+- (Optional)Create expo app
 
 ```sh
-npx create-expo-app mobile
-#npx expo install @sentry/react-native
+npx create-expo-app
+cd create-expo-app
+npx expo install @sentry/react-native
 npx @sentry/wizard@latest -s -i reactNative
   #yes
   #self-hosted
@@ -44,7 +43,9 @@ npx @sentry/wizard@latest -s -i reactNative
   }
 }
 ```
+
 - metro.config.js
+
 ```
 // This replaces `const { getDefaultConfig } = require('expo/metro-config');`
 const { getSentryExpoConfig } = require('@sentry/react-native/metro');
