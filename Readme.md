@@ -1,68 +1,56 @@
-# Study Sentry
+# Sentry
 
-## Requirements
-
-## How to
-
-Start a Redis container
+user: <vinciusfesil@gmail.com>
+password: xxxxxx
 
 ```sh
-docker run -d --name sentry-redis redis
+git clone https://github.com/getsentry/self-hosted
+cd self-hosted
+./install.sh
+cd ..
+docker compose up -d
 ```
 
-Start a Postgres container
+- Login <http://localhost:9000/>
+- Create Project for react native
+
+
+- Create expo app
 
 ```sh
-docker run -d --name sentry-postgres -e POSTGRES_PASSWORD=secret -e POSTGRES_USER=sentry postgres
+npx create-expo-app mobile
+#npx expo install @sentry/react-native
+npx @sentry/wizard@latest -s -i reactNative
+  #yes
+  #self-hosted
+  #http://localhost:9000
+  #yes
 ```
 
-Generate a new secret key to be shared by all sentry containers. This value will then be used as the SENTRY_SECRET_KEY environment variable.
+- Configuring `@sentry/react-native` can be done through the config plugin. Add the plugin to your project's app config file:
 
-```sh
-docker run --rm sentry config generate-secret-key
-
-# Generated value: b@7vy*r@*otg!el*_%3-5*o=@lmia9h#x%kgfi!1vw+%f4hbg_
+```app.json
+{
+  "expo": {
+    "plugins": [
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "sentry org slug, or use the `SENTRY_ORG` environment variable",
+          "project": "sentry project name, or use the `SENTRY_PROJECT` environment variable"
+        }
+      ]
+    ]
+  }
+}
 ```
-
-If this is a new database, you'll need to run upgrade
-
-```sh
-docker run -it --rm -e SENTRY_SECRET_KEY='<secret-key>' --link sentry-postgres:postgres --link sentry-redis:redis sentry upgrade
-#docker run -it --rm -e SENTRY_SECRET_KEY='b@7vy*r@*otg!el*_%3-5*o=@lmia9h#x%kgfi!1vw+%f4hbg_' --link sentry-postgres:postgres --link sentry-redis:redis sentry upgrade
-
-# user: viniciusfesil@gmail.com
-# pass: 123456
+- metro.config.js
 ```
+// This replaces `const { getDefaultConfig } = require('expo/metro-config');`
+const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 
-Note: the -it is important as the initial upgrade will prompt to create an initial user and will fail without it
+// This replaces `const config = getDefaultConfig(__dirname);`
+const config = getSentryExpoConfig(__dirname);
 
-Now start up Sentry server
-
-```sh
-docker run -d --name my-sentry -p 8080:9000 -e SENTRY_SECRET_KEY='<secret-key>' --link sentry-redis:redis --link sentry-postgres:postgres sentry
-#docker run -d --name my-sentry -p 8080:9000 -e SENTRY_SECRET_KEY='b@7vy*r@*otg!el*_%3-5*o=@lmia9h#x%kgfi!1vw+%f4hbg_' --link sentry-redis:redis --link sentry-postgres:postgres sentry
+module.exports = config;
 ```
-
-The default config needs a celery beat and celery workers, start as many workers as you need (each with a unique name)
-
-```sh
-docker run -d --name sentry-cron -e SENTRY_SECRET_KEY='<secret-key>' --link sentry-postgres:postgres --link sentry-redis:redis sentry run cron
-docker run -d --name sentry-worker-1 -e SENTRY_SECRET_KEY='<secret-key>' --link sentry-postgres:postgres --link sentry-redis:redis sentry run worker
-# docker run -d --name sentry-cron -e SENTRY_SECRET_KEY='b@7vy*r@*otg!el*_%3-5*o=@lmia9h#x%kgfi!1vw+%f4hbg_' --link sentry-postgres:postgres --link sentry-redis:redis sentry run cron
-# docker run -d --name sentry-worker-1 -e SENTRY_SECRET_KEY='b@7vy*r@*otg!el*_%3-5*o=@lmia9h#x%kgfi!1vw+%f4hbg_' --link sentry-postgres:postgres --link sentry-redis:redis sentry run worker
-```
-
-## Configuring the initial user
-
-If you did not create a superuser during upgrade, use the following to create one:
-
-```sh
-docker run -it --rm -e SENTRY_SECRET_KEY='<secret-key>' --link sentry-redis:redis --link sentry-postgres:postgres sentry createuser
-# docker run -it --rm -e SENTRY_SECRET_KEY='b@7vy*r@*otg!el*_%3-5*o=@lmia9h#x%kgfi!1vw+%f4hbg_' --link sentry-redis:redis --link sentry-postgres:postgres sentry createuser
-```
-
-
-
-## References
-
-- [Docker - Sentry](https://hub.docker.com/_/sentry)
