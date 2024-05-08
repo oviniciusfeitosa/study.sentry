@@ -16,7 +16,7 @@ docker compose up -d
 - (Optional)Create expo app
 
   ```sh
-  npx create-expo-app 
+  npx create-expo-app mobile
   cd mobile
   npx expo install @sentry/react-native
   npx @sentry/wizard@latest -s -i reactNative
